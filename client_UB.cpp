@@ -28,31 +28,6 @@ void on_availability(vsomeip::service_t _service, vsomeip::instance_t _instance,
 } 
 
 
-void run() {
-    std::unique_lock<std::mutex> its_lock(mutex);
-    condition.wait(its_lock);
-    std::cout << "RUN" << std::endl;    
-
-
-    std::shared_ptr< vsomeip::message > request;
-    request = vsomeip::runtime::get()->create_request();
-    request->set_service(SAMPLE_SERVICE_ID);
-    request->set_instance(SAMPLE_INSTANCE_ID);
-    request->set_method(SAMPLE_METHOD_ID);
-
-    std::shared_ptr< vsomeip::payload > its_payload = vsomeip::runtime::get()->create_payload();
-    std::vector< vsomeip::byte_t > its_payload_data;
-    for (vsomeip::byte_t i=0; i<10; i++) {
-        its_payload_data.push_back(counter);
-        counter++;
-    }
-    its_payload->set_data(its_payload_data);
-    request->set_payload(its_payload);
-
-    app->send(request);
-}
-
-
 void message_hanlder (const std::shared_ptr<vsomeip::message> & _message){
 
     std::cout << "Message received: " <<std::endl;
@@ -73,27 +48,6 @@ void message_hanlder (const std::shared_ptr<vsomeip::message> & _message){
     std::cout << std::endl;
 }
 
-void on_message(const std::shared_ptr<vsomeip::message> &_response) {
-    std::stringstream its_message;
-    its_message << "CLIENT: received a notification for event ["
-            << std::setw(4) << std::setfill('0') << std::hex
-            << _response->get_service() << "."
-            << std::setw(4) << std::setfill('0') << std::hex
-            << _response->get_instance() << "."
-            << std::setw(4) << std::setfill('0') << std::hex
-            << _response->get_method() << "] to Client/Session ["
-            << std::setw(4) << std::setfill('0') << std::hex
-            << _response->get_client() << "/"
-            << std::setw(4) << std::setfill('0') << std::hex
-            << _response->get_session()
-            << "] = ";
-    std::shared_ptr<vsomeip::payload> its_payload = _response->get_payload();
-    its_message << "(" << std::dec << its_payload->get_length() << ") ";
-    for (uint32_t i = 0; i < its_payload->get_length(); ++i)
-        its_message << std::hex << std::setw(2) << std::setfill('0')
-            << (int) its_payload->get_data()[i] << " ";
-    std::cout << its_message.str() << std::endl;
-}
 
 void subscribe(){
     std::unique_lock<std::mutex> its_lock(mutex);
@@ -112,14 +66,13 @@ int main() {
 
     app = vsomeip::runtime::get()->create_application("Client");
     app->init();
-    app->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, on_availability);
     app->request_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
-    //app->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, message_hanlder);
-    app->register_message_handler(vsomeip::ANY_SERVICE, vsomeip::ANY_INSTANCE, vsomeip::ANY_METHOD, message_hanlder);
+    app->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, on_availability);    
+    app->register_message_handler(vsomeip::ANY_SERVICE, vsomeip::ANY_INSTANCE, vsomeip::ANY_METHOD, 
+    );
     std::thread request_th{[&]
        {
-            while(1){
-                //run();
+            while(1){                
                 subscribe();
                 std::this_thread::sleep_for(std::chrono::milliseconds(500));
             }
