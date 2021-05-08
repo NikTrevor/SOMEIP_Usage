@@ -68,8 +68,7 @@ int main() {
     app->init();
     app->request_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
     app->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, on_availability);    
-    app->register_message_handler(vsomeip::ANY_SERVICE, vsomeip::ANY_INSTANCE, vsomeip::ANY_METHOD, 
-    );
+    app->register_message_handler(vsomeip::ANY_SERVICE, vsomeip::ANY_INSTANCE, vsomeip::ANY_METHOD,message_hanlder);
     std::thread request_th{[&]
        {
             while(1){                
