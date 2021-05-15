@@ -13,9 +13,9 @@ cd build
 cmake ..  
 make
 //Run on Server side 
-VSOMEIP_CONFIGURATION=../service.json ./service_UB  
+VSOMEIP_CONFIGURATION=../service.json ./service  
 //Run on Client side
-VSOMEIP_CONFIGURATION=../client.json ./client_UB
+VSOMEIP_CONFIGURATION=../client.json ./client
 ```
 
 Wireshark: 
