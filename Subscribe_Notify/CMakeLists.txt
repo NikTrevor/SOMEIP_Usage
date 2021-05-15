@@ -10,7 +10,7 @@ include_directories (
     ${VSOMEIP_INCLUDE_DIRS}
 )
 
-add_executable(client_UB client_UB.cpp)
-target_link_libraries(client_UB vsomeip3 ${Boost_LIBRARIES})
-add_executable(service_UB service_UB.cpp)
-target_link_libraries(service_UB vsomeip3 ${Boost_LIBRARIES})
+add_executable(client client.cpp)
+target_link_libraries(client vsomeip3 ${Boost_LIBRARIES})
+add_executable(service service.cpp)
+target_link_libraries(service vsomeip3 ${Boost_LIBRARIES})
