@@ -12,9 +12,9 @@ mkdir build
 cd build 
 cmake ..  
 make
-//Run on Server side 
+//Run on Server side (may need sudo)
 VSOMEIP_CONFIGURATION=../service.json ./service  
-//Run on Client side
+//Run on Client side (may need sudo)
 VSOMEIP_CONFIGURATION=../client.json ./client
 ```
 
