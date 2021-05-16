@@ -69,6 +69,13 @@ int main() {
     app->request_service(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID);
     app->register_availability_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, on_availability);
     app->register_message_handler(SAMPLE_SERVICE_ID, SAMPLE_INSTANCE_ID, SAMPLE_METHOD_ID, on_message);
-    std::thread sender(run);
+    std::thread request_th{[&]
+       {
+            while(1){                
+                run();
+                std::this_thread::sleep_for(std::chrono::milliseconds(500));
+            }
+       }
+    };
     app->start();
 }
