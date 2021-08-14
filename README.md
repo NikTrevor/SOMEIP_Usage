@@ -1,4 +1,6 @@
 
+Some example usage of SOME/IP communication using VSOMEIP.
+
 Enable multicast in both hosts:  
 ```sudo route add -nv <multicast_address> dev <interface>  ```
 
