@@ -1,5 +1,19 @@
 
-Some example usage of SOME/IP communication using VSOMEIP.
+Some example usages of SOME/IP communication using VSOMEIP.
+
+This could be run on the same host or between 2 different hosts.
+
+**To run on the same host:**
+```
+mkdir build    
+cd build 
+cmake ..  
+make 
+./service  
+./client
+```
+
+**To run on 2 different hosts:**
 
 Enable multicast in both hosts:  
 ```sudo route add -nv <multicast_address> dev <interface>  ```
@@ -7,8 +21,7 @@ Enable multicast in both hosts:
 Example:   
 ```sudo route add -nv 224.224.224.245 dev eth0```
 
-
-To run:  
+Build and run:  
 ```
 mkdir build    
 cd build 
